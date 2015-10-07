@@ -1,0 +1,134 @@
+root@4gbtcw:~# gdb --args php5-fpm -v
+GNU gdb (Ubuntu 7.7.1-0ubuntu5~14.04.2) 7.7.1
+[...]
+Reading symbols from php5-fpm...(no debugging symbols found)...done.
+(gdb) run
+Starting program: /usr/sbin/php5-fpm -v
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+Traceback (most recent call last):
+  File "/usr/share/gdb/auto-load/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19-gdb.py", line 63, in <module>
+    from libstdcxx.v6.printers import register_libstdcxx_printers
+ImportError: No module named 'libstdcxx'
+[New Thread 0x7fffe4173700 (LWP 15249)]
+[Thread 0x7fffe4173700 (LWP 15249) exited]
+[07-Oct-2015 23:32:47] NOTICE: PHP message: PHP Warning:  Module 'Zend OPcache' already loaded in Unknown on line 0
+[07-Oct-2015 23:32:47] NOTICE: PHP message: PHP Warning:  Zend OPcache: module registration failed! in Unknown on line 0
+PHP 5.5.9-1ubuntu4.13 (fpm-fcgi) (built: Sep 29 2015 15:28:48)
+Copyright (c) 1997-2014 The PHP Group
+Zend Engine v2.5.0, Copyright (c) 1998-2014 Zend Technologies
+    with Zend OPcache v7.0.3, Copyright (c) 1999-2014, by Zend Technologies
+*** Error in `/usr/sbin/php5-fpm': free(): invalid pointer: 0x00007fffbc3ff0e0 ***
+
+Program received signal SIGABRT, Aborted.
+0x00007ffff5b71cc9 in __GI_raise (sig=sig@entry=6)
+    at ../nptl/sysdeps/unix/sysv/linux/raise.c:56
+56	../nptl/sysdeps/unix/sysv/linux/raise.c: No such file or directory.
+(gdb) backtrace full
+#0  0x00007ffff5b71cc9 in __GI_raise (sig=sig@entry=6)
+    at ../nptl/sysdeps/unix/sysv/linux/raise.c:56
+        resultvar = 0
+        pid = 15245
+        selftid = 15245
+#1  0x00007ffff5b750d8 in __GI_abort () at abort.c:89
+        save_stage = 2
+        act = {__sigaction_handler = {sa_handler = 0x12, sa_sigaction = 0x12},
+          sa_mask = {__val = {0, 140737488338528, 140737351974252,
+              140737354129864, 140737354131296, 140737354110144,
+              140737354111400, 140737354072064, 140737354073344,
+              140737354074608, 140737354067968, 140737354069232,
+              140737354070496, 140737354063872, 140737354065128,
+              140737354066400}}, sa_flags = -134295552,
+          sa_restorer = 0x7ffff7fed4e8}
+        sigs = {__val = {32, 0 <repeats 15 times>}}
+#2  0x00007ffff5bae394 in __libc_message (do_abort=do_abort@entry=1,
+    fmt=fmt@entry=0x7ffff5cbcb28 "*** Error in `%s': %s: 0x%s ***\n")
+    at ../sysdeps/posix/libc_fatal.c:175
+        ap = {{gp_offset = 40, fp_offset = 0,
+            overflow_arg_area = 0x7fffffffc160,
+            reg_save_area = 0x7fffffffc0f0}}
+        fd = 4
+        on_2 = <optimized out>
+---Type <return> to continue, or q <return> to quit---
+        list = <optimized out>
+        nlist = <optimized out>
+        cp = <optimized out>
+        written = <optimized out>
+#3  0x00007ffff5bba66e in malloc_printerr (ptr=<optimized out>,
+    str=0x7ffff5cb8c19 "free(): invalid pointer", action=1) at malloc.c:4996
+        buf = "00007fffbc3ff0e0"
+        cp = <optimized out>
+#4  _int_free (av=<optimized out>, p=<optimized out>, have_lock=0)
+    at malloc.c:3840
+        size = <optimized out>
+        fb = <optimized out>
+        nextchunk = <optimized out>
+        nextsize = <optimized out>
+        nextinuse = <optimized out>
+        prevsize = <optimized out>
+        bck = <optimized out>
+        fwd = <optimized out>
+        errstr = <optimized out>
+        locked = <optimized out>
+#5  0x000000000068f0ab in php_module_shutdown ()
+No symbol table info available.
+#6  0x0000000000462e97 in main ()
+No symbol table info available.
+(gdb) info registers
+rax            0x0	0
+rbx            0x53	83
+rcx            0xffffffffffffffff	-1
+rdx            0x6	6
+rsi            0x3b8d	15245
+rdi            0x3b8d	15245
+rbp            0x7fffffffc150	0x7fffffffc150
+rsp            0x7fffffffbdb8	0x7fffffffbdb8
+r8             0x3065306666336362	3487246702827758434
+r9             0x0	0
+r10            0x8	8
+r11            0x206	518
+r12            0x7fffffffbf60	140737488338784
+r13            0x7	7
+r14            0x53	83
+r15            0x7	7
+rip            0x7ffff5b71cc9	0x7ffff5b71cc9 <__GI_raise+57>
+eflags         0x206	[ PF IF ]
+cs             0x33	51
+ss             0x2b	43
+ds             0x0	0
+es             0x0	0
+fs             0x0	0
+gs             0x0	0
+(gdb) x/16i $pc
+=> 0x7ffff5b71cc9 <__GI_raise+57>:	cmp    $0xfffffffffffff000,%rax
+   0x7ffff5b71ccf <__GI_raise+63>:	ja     0x7ffff5b71cea <__GI_raise+90>
+   0x7ffff5b71cd1 <__GI_raise+65>:	repz retq
+   0x7ffff5b71cd3 <__GI_raise+67>:	nopl   0x0(%rax,%rax,1)
+   0x7ffff5b71cd8 <__GI_raise+72>:	test   %eax,%eax
+   0x7ffff5b71cda <__GI_raise+74>:	jg     0x7ffff5b71cb9 <__GI_raise+41>
+   0x7ffff5b71cdc <__GI_raise+76>:	mov    %eax,%ecx
+   0x7ffff5b71cde <__GI_raise+78>:	neg    %ecx
+   0x7ffff5b71ce0 <__GI_raise+80>:	test   $0x7fffffff,%eax
+   0x7ffff5b71ce5 <__GI_raise+85>:	cmove  %esi,%ecx
+   0x7ffff5b71ce8 <__GI_raise+88>:	jmp    0x7ffff5b71cb9 <__GI_raise+41>
+   0x7ffff5b71cea <__GI_raise+90>:
+    mov    0x387177(%rip),%rdx        # 0x7ffff5ef8e68
+   0x7ffff5b71cf1 <__GI_raise+97>:	neg    %eax
+   0x7ffff5b71cf3 <__GI_raise+99>:	mov    %eax,%fs:(%rdx)
+   0x7ffff5b71cf6 <__GI_raise+102>:	or     $0xffffffffffffffff,%rax
+   0x7ffff5b71cfa <__GI_raise+106>:	retq
+(gdb) thread apply all backtrace
+
+Thread 1 (Thread 0x7ffff7fe8740 (LWP 15245)):
+#0  0x00007ffff5b71cc9 in __GI_raise (sig=sig@entry=6)
+    at ../nptl/sysdeps/unix/sysv/linux/raise.c:56
+#1  0x00007ffff5b750d8 in __GI_abort () at abort.c:89
+#2  0x00007ffff5bae394 in __libc_message (do_abort=do_abort@entry=1,
+    fmt=fmt@entry=0x7ffff5cbcb28 "*** Error in `%s': %s: 0x%s ***\n")
+    at ../sysdeps/posix/libc_fatal.c:175
+#3  0x00007ffff5bba66e in malloc_printerr (ptr=<optimized out>,
+    str=0x7ffff5cb8c19 "free(): invalid pointer", action=1) at malloc.c:4996
+#4  _int_free (av=<optimized out>, p=<optimized out>, have_lock=0)
+    at malloc.c:3840
+#5  0x000000000068f0ab in php_module_shutdown ()
+#6  0x0000000000462e97 in main ()

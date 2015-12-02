@@ -1,5 +1,7 @@
 # invalid pointer: 0x00007f75ec3ff0e0
 
+Comment on PHP's Bug or submit fix - https://bugs.php.net/bug.php?id=70665 
+
 ````bash 
 root@4gbtcw:/home/ubuntu# php -v
 PHP Warning:  Module 'Zend OPcache' already loaded in Unknown on line 0
